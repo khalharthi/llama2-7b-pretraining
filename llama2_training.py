@@ -303,7 +303,7 @@ raw_model = model.module if ddp else model
 max_lr = 6e-4
 min_lr = max_lr * 0.1
 warmup_steps = 715
-max_steps = 4700
+max_steps = 4730
 
 def get_lr(it):
     if it < warmup_steps:
