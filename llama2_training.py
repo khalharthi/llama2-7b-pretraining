@@ -16,7 +16,7 @@ import torch.distributed as dist
 import numpy as np
 #from transformers import AutoTokenizer
 
-torch.cuda.empty_cache()
+torch.cuda.empty_cache() # Free up the GPU memory held by the caching allocator before starting training
 @dataclass
 class LLAMAConfig:
     block_size: int = 4096
