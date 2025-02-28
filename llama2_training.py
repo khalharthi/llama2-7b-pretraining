@@ -96,7 +96,7 @@ class CausalSelfAttention(nn.Module):
 class FeedForward(nn.Module):
     def __init__(self, config):
         super().__init__()
-        expansion_factor = (4 * config.n_embd) / 3 # Calculate expansion factor for SwiGLU
+        expansion_factor = (4 * config.n_embd) / 3 # Expansion factor for SwiGLU
         # Expansion layer (SwiGLU requires 2/3 * expansion factor)
         self.w1 = nn.Linear(config.n_embd, int(2 * expansion_factor)) # Expansion layer
         self.w2 = nn.Linear(int(expansion_factor), config.n_embd)  # Projection layer
