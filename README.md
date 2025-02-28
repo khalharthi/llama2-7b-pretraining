@@ -104,6 +104,7 @@ This project was inspired by the implementation of **GPT-2 124M**, from which th
 - Replaced **LayerNorm** with **RMSNorm**, as used in the Llama architecture.
 - Integrated **KV caching** for more efficient text generation during pre-training.
 - Added **Rotary Positional Embeddings (RoPE)** following the Llama architecture.
+- Modified the **FeedForward** layer to align with the **Llama architecture**, replacing GeLU with **SwiGLU**.
 
 Special thanks to **Andrej karpathy** for his open-source work, which provided a strong foundation for this project.
 
