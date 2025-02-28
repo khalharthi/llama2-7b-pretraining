@@ -64,7 +64,7 @@ class CausalSelfAttention(nn.Module):
         assert config.n_embd % config.n_head == 0
         self.c_att = nn.Linear(config.n_embd, 3 * config.n_embd)
         self.c_proj = nn.Linear(config.n_embd, config.n_embd)
-        self.c_proj.SCALE_INIT = 1
+        self.c_proj.SCALE_INIT = 1 # Attribute Injection, for custom weight initialization
         self.apply_rotary = ApplyRotaryEmbedings(config)
         self.n_head = config.n_head
         self.n_embd = config.n_embd
