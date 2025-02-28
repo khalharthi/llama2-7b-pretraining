@@ -96,14 +96,17 @@ class CausalSelfAttention(nn.Module):
 class FeedForward(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.w1 = nn.Linear(config.n_embd, 11008)  # Expansion layer
-        self.w2 = nn.Linear(11008, config.n_embd)  # Projection layer
+        expansion_factor = (4 * config.n_embd) / 3 # Calculate expansion factor for SwiGLU
+        # Expansion layer (SwiGLU requires 2/3 * expansion factor)
+        self.w1 = nn.Linear(config.n_embd, int(2 * expansion_factor)) # Expansion layer
+        self.w2 = nn.Linear(int(expansion_factor), config.n_embd)  # Projection layer
         self.w2.SCALE_INIT = 1
 
     def forward(self, x):
-        w1_out = self.w1(x)  # Shape: (batch, seq_len, 11008)
-        gate, value = w1_out.chunk(2, dim=-1)  # Split into gate and value
-        swiglu_out = torch.sigmoid(gate) * value  # SwiGLU activation
+        w1_out = self.w1(x)  # Shape: (B, T, 2/3 * expansion)
+        # Split into gate and value 
+        gate, value = w1_out.chunk(2, dim=-1)  #Each of shape: (B, T, 1/3 * expansion)
+        swiglu_out = F.silu(gate) * value  # SwiGLU activation
         return self.w2(swiglu_out)  # Project back to original dimensionality
     
 class Block(nn.Module):
