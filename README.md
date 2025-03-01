@@ -80,7 +80,7 @@ The training configuration is as follows:
 * **Batch Size per GPU**: B = 64
 * **Sequence Length**: T = 4096
 * **Number of GPUs**: ddp_world_size = 8 (using 8x A100 GPUs)
-* **Total Tokens per GPU**: B * T = 260,416
+* **Total Tokens per GPU**: B * T = 262,144
 * **Total Training Tokens**: *FineWeb-Edu* dataset contains 9,853,989,344 tokens for training, and 100,000,000 for validation
 * **number of steps per 1 epoch**: 9,853,989,344 / 2,083,328 ≈ 4,730 steps
 * **Estimated Training Time per Epoch**: Each step takes **~30 seconds** (for 8x A100 GPUs, estimated), 4,730 * 30 = 141,900 seconds(~40 hours)
