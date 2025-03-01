@@ -50,9 +50,9 @@ class ApplyRotaryEmbedings(nn.Module):
         q_complex = torch.view_as_complex(q.float().reshape(B, H, T, D // 2, 2)) # (B, H, T, D//2, 2) >--(view_as_complex)--> (B, H, T, D//2)
         k_complex = torch.view_as_complex(k.float().reshape(B, H, T, D // 2, 2)) # (B, H, T, D//2, 2) >--(view_as_complex)--> (B, H, T, D//2)
 
-        # Apply RoPE rotation in complex space
-        q_out = torch.view_as_real(q_complex * freqs_cis).flatten(-2, -1)
-        k_out = torch.view_as_real(k_complex * freqs_cis).flatten(-2, -1)
+        # Apply RoPE rotation in complex space, and then convert the last dim as real numbers
+        q_out = torch.view_as_real(q_complex * freqs_cis).flatten(-2, -1) # >--(B, H, T, D//2)--(view_as_real)--(B, H, T, D//2, 2)--(flatten)-->(B, H, T, D)
+        k_out = torch.view_as_real(k_complex * freqs_cis).flatten(-2, -1) # >--(B, H, T, D//2)--(view_as_real)--(B, H, T, D//2, 2)--(flatten)-->(B, H, T, D)
 
         return q_out.type_as(q), k_out.type_as(k)
 
