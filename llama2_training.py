@@ -76,7 +76,6 @@ class CausalSelfAttention(nn.Module):
         
         head_dim = self.n_embd // self.n_head
         Q, K, V = [t.view(B, T, self.n_head, head_dim).permute(0, 2, 1, 3) for t in (Q, K, V)] # Q, K, V shapes: (B, n_head, T, head_dim)
-        freqs_cis = self.apply_rotary.freqs_cis[:T]  # Shape (T, head_dim // 2)
         Q,  K = self.apply_rotary(Q, K)
 
         if kv_cache is not None:
