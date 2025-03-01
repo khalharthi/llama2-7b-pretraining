@@ -46,7 +46,7 @@ class ApplyRotaryEmbedings(nn.Module):
         # Slice `freqs_cis` to match `T`
         freqs_cis = self.freqs_cis[:T].unsqueeze(0).unsqueeze(0)  # (1, 1, T, D//2)
 
-        # Convert `q` and `k` to complex
+        # Reshape `q` and `k` to treat the last dimension as complex numbers (real and imaginary parts)
         q_complex = torch.view_as_complex(q.float().reshape(B, H, T, D // 2, 2)) # (B, H, T, D//2, 2) >--(view_as_complex)--> (B, H, T, D//2)
         k_complex = torch.view_as_complex(k.float().reshape(B, H, T, D // 2, 2)) # (B, H, T, D//2, 2) >--(view_as_complex)--> (B, H, T, D//2)
 
