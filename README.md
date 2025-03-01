@@ -84,7 +84,7 @@ The training configuration is as follows:
 * **Total Tokens per 1 Step**: B * T * 8 = 2,097,152
 * **Total Training Tokens**: *FineWeb-Edu* dataset contains 9,853,989,344 tokens for training, and 100,000,000 for validation
 * **Number of Steps per 1 Epoch**: 9,853,989,344 / 2,097,152 ≈ 4,700 steps
-* **Estimated Training Time per Epoch**: Each step takes **~30 seconds** (for 8x A100 GPUs, estimated), 4,730 * 30 = 141,000 seconds(~40 hours)
+* **Estimated Training Time per Epoch**: Each step takes **~30 seconds** (for 8x A100 GPUs, estimated), 4,700 * 30 = 141,000 seconds(~40 hours)
 
 ---
 
