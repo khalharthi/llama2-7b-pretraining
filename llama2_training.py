@@ -80,8 +80,8 @@ class CausalSelfAttention(nn.Module):
 
         if kv_cache is not None:
             prev_k, prev_v = kv_cache
-            K = torch.cat([prev_k, K], dim=2)
-            V = torch.cat([prev_v, V], dim=2)
+            K = torch.cat([prev_k, K], dim=1)
+            V = torch.cat([prev_v, V], dim=1)
             new_kv_cache = (K, V)
         else:
             new_kv_cache = None
