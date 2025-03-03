@@ -426,6 +426,7 @@ for step in range(max_steps):
                 # Append the sampled token to the generated sequence
                 xgen = torch.cat((xgen, xcol), dim=1) # xgen: (B, T + 1)
                 
+        # Decode and print the generated sequences        
         for i in range(num_return_sequences):
             tokens = xgen[i, :max_length].tolist()
             decoded = enc.decode(tokens)
