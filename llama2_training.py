@@ -393,10 +393,10 @@ for step in range(max_steps):
         num_return_sequences = 4
         max_length = 40
         tokens = enc.encode("Hello I'm a language model, ")
-        tokens = torch.tensor(tokens, dtype=torch.long)
+        tokens = torch.tensor(tokens, dtype=torch.long, device=device)
         tokens = tokens.unsqueeze(0).repeat(num_return_sequences, 1)
         kv_cache = None
-        xgen = tokens.to(device)
+        xgen = tokens
         first_step = True
 
         while xgen.size(1) < max_length:
