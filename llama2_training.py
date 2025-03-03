@@ -397,22 +397,28 @@ for step in range(max_steps):
         tokens = tokens.unsqueeze(0).repeat(num_return_sequences, 1)
         kv_cache = None
         xgen = tokens
-        first_step = True
+        first_step = True # Flag to track the first step
 
+        # Generate tokens until max_length is reached
         while xgen.size(1) < max_length:
             with torch.no_grad():
                 with torch.autocast(device_type=device, dtype=torch.bfloat16):
+                    # First step: Pass full sequence
                     if first_step:
-                        logits, _, kv_cache = model(xgen, kv_cache=kv_cache) #(B, T, vocab_size)
+                        logits, _, kv_cache = model(xgen, kv_cache=kv_cache) # logits: (B, T, vocab_size)
                         first_step = False
+                    # Subsequent steps: Only pass the last generated token
                     else:
-                        logits, _, kv_cache = model(xgen[:, -1:], kv_cache=kv_cache)
+                        logits, _, kv_cache = model(xgen[:, -1:], kv_cache=kv_cache) # logits: (B, 1, vocab_size)
+                # Get the logits for the last token
                 logits = logits[:, -1, :] #(B, vocab_size)
                 probs = F.softmax(logits, dim=-1)
-                topk_probs, topk_indices = torch.topk(probs, 50, dim=-1) 
-                ix = torch.multinomial(topk_probs, 1)
-                xcol = torch.gather(topk_indices, -1, ix) #(B, 1)
-                xgen = torch.cat((xgen, xcol), dim=1)
+                # Sample from the top-k tokens
+                topk_probs, topk_indices = torch.topk(probs, 50, dim=-1) # topk_probs: (B, 50), topk_indices: (B, 50)
+                ix = torch.multinomial(topk_probs, 1) # ix: (B, 1)
+                xcol = torch.gather(topk_indices, -1, ix) # xcol: (B, 1)
+                # Append the sampled token to the generated sequence
+                xgen = torch.cat((xgen, xcol), dim=1) # xgen: (B, T + 1)
         for i in range(num_return_sequences):
             tokens = xgen[i, :max_length].tolist()
             decoded = enc.decode(tokens)
