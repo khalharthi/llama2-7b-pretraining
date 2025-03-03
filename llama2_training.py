@@ -410,15 +410,22 @@ for step in range(max_steps):
                     # Subsequent steps: Only pass the last generated token
                     else:
                         logits, _, kv_cache = model(xgen[:, -1:], kv_cache=kv_cache) # logits: (B, 1, vocab_size)
+                        
                 # Get the logits for the last token
                 logits = logits[:, -1, :] #(B, vocab_size)
+                
+                # Apply softmax to get probabilities
                 probs = F.softmax(logits, dim=-1)
+                
                 # Sample from the top-k tokens
                 topk_probs, topk_indices = torch.topk(probs, 50, dim=-1) # topk_probs: (B, 50), topk_indices: (B, 50)
+                
                 ix = torch.multinomial(topk_probs, 1) # ix: (B, 1)
                 xcol = torch.gather(topk_indices, -1, ix) # xcol: (B, 1)
+                
                 # Append the sampled token to the generated sequence
                 xgen = torch.cat((xgen, xcol), dim=1) # xgen: (B, T + 1)
+                
         for i in range(num_return_sequences):
             tokens = xgen[i, :max_length].tolist()
             decoded = enc.decode(tokens)
